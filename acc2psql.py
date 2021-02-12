@@ -1,7 +1,7 @@
 import sys
 
 import pyodbc
-path = 'D:\Code\equin-django\db\equin.mdb'
+path = 'D:\Code\equin-django\db\equin.accdb'
 conn = pyodbc.connect(f'Driver={{Microsoft Access Driver (*.mdb, *.accdb)}};DBQ={path};')
 cursor = conn.cursor()
 
