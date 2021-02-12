@@ -1,7 +1,7 @@
 import sys
 
 import pyodbc
-path = 'D:\Code\equin-django\django-equin-2000.mdb'
+path = 'D:\Code\equin-django\db\equin.mdb'
 conn = pyodbc.connect(f'Driver={{Microsoft Access Driver (*.mdb, *.accdb)}};DBQ={path};')
 cursor = conn.cursor()
 
@@ -15,18 +15,20 @@ table_column_count={}
 drop_tables = ''
 for t in tables:
     if not 'MSys' in t and not '~TMP' in t:
+        print(t)
 
         count_stat = 0
         foreign_keys = ''
         for st in cursor.statistics(t):
             count_stat = count_stat + 1
+            print(st)
             # ke [2] pasti mulai informasi foreign key
             # jika st[5] ada karakter "_" makd dicek. jika yang pertama adalah id, maka itu berarti foreign key one to many, dimana tabelnya ada di bagian kedua. That's it!
             if count_stat >= 3:
                 c0 = str(st[2])
-                c5 = st[5]
-                c1 = str(st[5]).split('_')[0]
-                c2 = str(st[5]).split('_')[1]
+                c5 = st[8]
+                c1 = str(c5).split('_')[0]
+                c2 = str(c5).split('_')[1]
 
                 # it is foreign key!
                 if c1 == 'id':
