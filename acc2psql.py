@@ -37,7 +37,7 @@ for t in tables:
                 # it is foreign key!
                 if c1 == 'id' and foreign_keys_exist.get(c5, None) is None:
                     foreign_keys_exist[c5] = True
-                    foreign_keys = f'{foreign_keys}FOREIGN KEY ({c5}) REFERENCES {c2} ({c1}{c2}),\n'
+                    foreign_keys = f'{foreign_keys}FOREIGN KEY ({c5}) REFERENCES {c2} ({c1}{c2}) ON DELETE CASCADE,\n'
 
         foreign_keys = foreign_keys[:-2]
 
@@ -70,10 +70,34 @@ for t in tables:
                f');\n'
         create_tables[t] = create_sql
 
+table_independent = {}
+table_dependent = {}
+drop_table_independent = {}
+drop_table_dependent = {}
+
+for k in create_tables:
+    if '_' not in k:
+        table_independent[k] = create_tables[k]
+        drop_table_independent[k] = f'DROP TABLE IF EXISTS {k};\n'
+    else:
+        table_dependent[k] = create_tables[k]
+        drop_table_dependent[k] = f'DROP TABLE IF EXISTS {k};\n'
+
+drop_tables = ''
+for t in drop_table_independent:
+    drop_tables = f'{drop_tables}{drop_table_independent[t]}'
+
+for t in drop_table_dependent:
+    drop_tables = f'{drop_tables}{drop_table_dependent[t]}'
+
+create_sql = ''
+for t in table_independent:
+    create_sql = f'{create_sql}{table_independent[t]}'
+
+for t in table_dependent:
+    create_sql = f'{create_sql}{table_dependent[t]}'
+
 
 #SQL Generations
-psql = drop_tables
-for k in create_tables:
-    # print(k)
-    psql = f'{psql}\n{create_tables[k]}'
+psql = f'{drop_tables}\n{create_sql}'
 print(psql)
