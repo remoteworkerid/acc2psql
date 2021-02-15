@@ -119,7 +119,3 @@ def convert(src, out, host, username, password, db, dump):
             print('Done.')
 
 
-    else:
-        print('No connection to psql given')
-
-
