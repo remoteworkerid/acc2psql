@@ -6,7 +6,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 f = open("requirements.txt", "r")
 setuptools.setup(
     name="acc2psql", # Replace with your own username
-    version="0.0.6",
+    version="0.0.8",
     author="Eko S. Wibowo",
     author_email="swdev.bali@gmail.com",
     description="Converter from *.accdb/*.mdb to PostgreSQL *.sql",
