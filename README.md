@@ -26,5 +26,6 @@ You can also use this to any tool necessary: for example, I am thinking to use t
 >[Spotify: Everybody can code!](https://open.spotify.com/episode/2MeFoHkbvsyMZiplw01yYv?si=EQFpnYZoTzyp_JngpuIzEQ)
 >
 > swdev.balI@gmail.com
+> #WeWorkRemotelyAsOne
 
 
