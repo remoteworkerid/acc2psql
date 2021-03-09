@@ -17,6 +17,7 @@ def convert(src, out, host, username, password, db, dump):
         if not 'MSys' in t and not '~TMP' in t and not 'qry_' in t:  # and t == 'transaksisaham':
             # print(t)
 
+            '''
             count_stat = 0
             foreign_keys = ''
             foreign_keys_exist = {}
@@ -37,6 +38,30 @@ def convert(src, out, host, username, password, db, dump):
                     if c1 == 'id' and foreign_keys_exist.get(c5, None) is None:
                         foreign_keys_exist[c5] = True
                         foreign_keys = f'{foreign_keys}FOREIGN KEY ({c5}) REFERENCES {c2} ({c1}{c2}) ON DELETE CASCADE,\n'
+
+            foreign_keys = foreign_keys[:-2]
+            '''
+
+            # change routine for collecting foreign key with query from MSysRelationships
+            # it will return information : 
+            # - ccolumn
+            # - grbit
+            # - icolumn
+            # - szColumn
+            # - szObject # table_name
+            # - sZReferencedColumn # field_reference
+            # - sZReferencedObject # table_reference
+            # - sZRelationship # relationship_name
+            
+
+            foreign_keys = ''
+            foreign_keys_exist = {}
+            for row in cursor.execute("select sZObject, sZreferencedColumn, sZReferencedObject, sZRelationship from MSysRelationships where szObject=?", t):
+                fk = row[1]
+                table_reference = row[2]
+                if foreign_keys_exist.get(row[1], None) is None:
+                    foreign_keys_exist[row[1]] = True
+                    foreign_keys = f'{foreign_keys}FOREIGN KEY ({fk}) REFERENCES {table_reference} ({fk}) ON DELETE CASCADE,\n'
 
             foreign_keys = foreign_keys[:-2]
 
@@ -61,7 +86,7 @@ def convert(src, out, host, username, password, db, dump):
 
             table_column_count[t] = column_count
 
-            if foreign_keys is not '':
+            if foreign_keys != '':
                 foreign_keys = f'\n, {foreign_keys}'
 
             create_sql = f'CREATE TABLE {t} (\n' \

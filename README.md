@@ -2,7 +2,11 @@
 ## Convert Microsoft Access *.accdb or *.mdb into *.sql PostgreSQL format
 I believe in MS Access regarding its fast prototyping of relational database. You probably are not going to use MS Access in production environment due to its file based and single user restriction. But in a prototyping phase, MS Acces is one tool that is hard to beat!
 
-Quick and easily prototype your database using MS Access, once satisfied, use this tool to convert said database into PostgreSQL DDL. You can either save it to *.sql file, dump it to console or directly execute it to PostgreSQL instance
+Quick and easily prototype your database using MS Access, once satisfied, use this tool to convert said database into PostgreSQL DDL. You can either save it to *.sql file, dump it to console or directly execute it to PostgreSQL instance.
+
+Before you run this tool, you must preparing your Ms Access DB by grant read access to the Admin role for read relationship/foreign key information with executing scripts below in MsAccess Immediate panel
+    ?CurrentUser
+    CurrentProject.Connection.Execute "GRANT SELECT ON MSysRelationships TO Admin"
 
 If you use Django, you can then run `python manage.py inspectdb` to turn generated tables into Django models and .. voila, you can skip manually coding tedious Django models yourselves!
 
